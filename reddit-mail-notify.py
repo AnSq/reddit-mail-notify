@@ -27,7 +27,7 @@ icon.set_tooltip("loading...")
 print "done"
 
 print "logging in...",
-reddit = praw.Reddit(user_agent="reddit-mail-notify v1.0 by /u/AnSq")
+reddit = praw.Reddit(user_agent="reddit-mail-notify v1.0.1 by /u/AnSq")
 reddit.login()
 print "done"
 print "logged in as %s" % reddit.user.name
@@ -62,7 +62,6 @@ def poll(prev):
 
 
 def click(ob, ev, prev):
-	prev.count = 0
 	if ev.button == 1:
 		"left click"
 		if prev.count == 0:
@@ -72,6 +71,8 @@ def click(ob, ev, prev):
 	elif ev.button == 3:
 		"right click"
 		webbrowser.open("http://www.reddit.com/user/%s" % reddit.user.name)
+	prev.count = 0
+	icon.set_from_pixbuf(nomailIcon)
 
 
 print "connecting events...",

@@ -4,6 +4,7 @@ Status bar icon and popup notification for new reddit messages. Completely unoff
 
 ## Features
 
+* Polls for new mail every minute
 * Mail icon on your status bar, just like on the website
 * Icon changes color when you have new messages
 * Tooltip shows how many new messages there are, and reminds you who you're logged in as

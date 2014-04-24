@@ -11,7 +11,7 @@ Status bar icon and popup notification for new reddit messages. Completely unoff
 
 ## Usage
 
-Simple run the program. It takes no parameters.
+Simply run the program. It takes no parameters.
 
 By default it will prompt you for a username and password, or you can make a `praw.ini` file that looks like this:
 

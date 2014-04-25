@@ -91,7 +91,7 @@ def setup():
 	#print "done"
 
 	#print "registering polling function...",
-	gobject.timeout_add(5000, poll, reddit, icon, mailIcon, nomailIcon, prev)
+	gobject.timeout_add(60000, poll, reddit, icon, mailIcon, nomailIcon, prev)
 	#print "done"
 
 

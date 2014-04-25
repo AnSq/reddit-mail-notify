@@ -70,7 +70,7 @@ def setup():
 
 	print "logging in...",
 	try:
-		reddit = praw.Reddit(user_agent="reddit-mail-notify v1.0.3 by /u/AnSq")
+		reddit = praw.Reddit(user_agent="reddit-mail-notify v1.0.4 by /u/AnSq")
 		reddit.login()
 		print "logged in as /u/%s" % reddit.user.name
 	except Exception as e:
@@ -94,6 +94,8 @@ def setup():
 	gobject.timeout_add(60000, poll, reddit, icon, mailIcon, nomailIcon, prev)
 	#print "done"
 
+	#first poll
+	poll(reddit, icon, mailIcon, nomailIcon, prev)
 
 
 if __name__ == "__main__":

@@ -1,14 +1,16 @@
 #!/usr/bin/python -u
 # -u for unbuffered output
 
-import time
-import threading
 import webbrowser
-
 import praw
 import gtk
 import gobject
 import pynotify
+
+
+version = "1.0.7"
+user_agent = "reddit-mail-notify v%s by /u/AnSq" % version
+poll_time = 60000
 
 
 def make_message(new_messages, name):
@@ -17,7 +19,7 @@ def make_message(new_messages, name):
 	return "%s new message%s for /u/%s" % (msgCount, plural, name)
 
 
-def poll(reddit, icon, mailIcon, nomailIcon, prev, notify):
+def poll(reddit, icon, mailIcon, nomailIcon, errorIcon, prev, notify):
 	try:
 		#print "polling...",
 		new_messages = len(list(reddit.get_unread()))
@@ -33,11 +35,13 @@ def poll(reddit, icon, mailIcon, nomailIcon, prev, notify):
 		prev.count = new_messages
 	except Exception as e:
 		print "Polling error: %s: %s" % (type(e).__name__, e)
+		icon.set_from_pixbuf(errorIcon)
+		icon.set_tooltip("Polling error\n(%s on last successful poll)" % make_message(prev.count, reddit.user.name))
 	finally:
 		return True
 
 
-def click(ob, ev, reddit, icon, mailIcon, nomailIcon, prev, notify):
+def click(ob, ev, reddit, icon, mailIcon, nomailIcon, errorIcon, prev, notify):
 	if ev.button == 1:
 		#print "left click"
 		if prev.count == 0:
@@ -57,6 +61,7 @@ class PrevCount:
 		self.count = 0
 
 
+
 def setup():
 	#print "loading icons...",
 	loadImage = gtk.Image()
@@ -66,6 +71,9 @@ def setup():
 
 	loadImage.set_from_file("nomail.png")
 	nomailIcon = loadImage.get_pixbuf()
+
+	loadImage.set_from_file("error.png")
+	errorIcon = loadImage.get_pixbuf()
 	#print "done"
 
 	#print "setting up status bar...",
@@ -77,7 +85,7 @@ def setup():
 
 	print "logging in...",
 	try:
-		reddit = praw.Reddit(user_agent="reddit-mail-notify v1.0.6 by /u/AnSq")
+		reddit = praw.Reddit(user_agent=user_agent)
 		reddit.login()
 		print "logged in as /u/%s" % reddit.user.name
 	except Exception as e:
@@ -88,25 +96,26 @@ def setup():
 	#print "setting up popup...",
 	pynotify.init("reddit-mail-notify")
 	notify = pynotify.Notification("New reddit mail for /u/%s" % reddit.user.name)
-	notify.set_timeout(60000)
+	notify.set_timeout(5000)
 	#print "done"
 
 	prev = PrevCount()
 
 	#print "connecting events...",
-	icon.connect("button-press-event", click, reddit, icon, mailIcon, nomailIcon, prev, notify)
+	icon.connect("button-press-event", click, reddit, icon, mailIcon, nomailIcon, errorIcon, prev, notify)
 	#print "done"
 
 	#print "registering polling function...",
-	gobject.timeout_add(60000, poll, reddit, icon, mailIcon, nomailIcon, prev, notify)
+	gobject.timeout_add(poll_time, poll, reddit, icon, mailIcon, nomailIcon, errorIcon, prev, notify)
 	#print "done"
 
 	#first poll
-	poll(reddit, icon, mailIcon, nomailIcon, prev, notify)
+	poll(reddit, icon, mailIcon, nomailIcon, errorIcon, prev, notify)
 
 
 if __name__ == "__main__":
 	try:
+		print user_agent
 		setup()
 		#print "entering main loop"
 		gtk.main()

@@ -11,13 +11,19 @@ import gobject
 import pynotify
 
 
+def make_message(new_messages, name):
+	msgCount = "No" if new_messages==0 else ""+new_messages
+	plural = "" if new_messages==1 else "s"
+	return "%s new message%s for /u/%s" % (msgCount, plural, name)
+
+
 def poll(reddit, icon, mailIcon, nomailIcon, prev, notify):
 	try:
 		#print "polling...",
 		new_messages = len(list(reddit.get_unread()))
-		string = "%d new message%s for /u/%s" % (new_messages, "" if new_messages==1 else "s", reddit.user.name)
-		print string
-		icon.set_tooltip(string)
+		message = make_message(new_messages, reddit.user.name)
+		print message
+		icon.set_tooltip(message)
 		if new_messages > 0:
 			icon.set_from_pixbuf(mailIcon)
 		else:
@@ -43,6 +49,7 @@ def click(ob, ev, reddit, icon, mailIcon, nomailIcon, prev, notify):
 		webbrowser.open("http://www.reddit.com/user/%s" % reddit.user.name)
 	prev.count = 0
 	icon.set_from_pixbuf(nomailIcon)
+	icon.set_tooltip(make_message(0, reddit.user.name))
 
 
 class PrevCount:
@@ -70,7 +77,7 @@ def setup():
 
 	print "logging in...",
 	try:
-		reddit = praw.Reddit(user_agent="reddit-mail-notify v1.0.5 by /u/AnSq")
+		reddit = praw.Reddit(user_agent="reddit-mail-notify v1.0.6 by /u/AnSq")
 		reddit.login()
 		print "logged in as /u/%s" % reddit.user.name
 	except Exception as e:

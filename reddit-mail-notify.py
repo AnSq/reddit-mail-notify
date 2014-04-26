@@ -11,7 +11,7 @@ import gobject
 import pynotify
 
 
-def poll(reddit, icon, mailIcon, nomailIcon, prev):
+def poll(reddit, icon, mailIcon, nomailIcon, prev, notify):
 	try:
 		#print "polling...",
 		new_messages = len(list(reddit.get_unread()))
@@ -31,7 +31,7 @@ def poll(reddit, icon, mailIcon, nomailIcon, prev):
 		return True
 
 
-def click(ob, ev, reddit, icon, mailIcon, nomailIcon, prev):
+def click(ob, ev, reddit, icon, mailIcon, nomailIcon, prev, notify):
 	if ev.button == 1:
 		#print "left click"
 		if prev.count == 0:
@@ -70,7 +70,7 @@ def setup():
 
 	print "logging in...",
 	try:
-		reddit = praw.Reddit(user_agent="reddit-mail-notify v1.0.4 by /u/AnSq")
+		reddit = praw.Reddit(user_agent="reddit-mail-notify v1.0.5 by /u/AnSq")
 		reddit.login()
 		print "logged in as /u/%s" % reddit.user.name
 	except Exception as e:
@@ -87,15 +87,15 @@ def setup():
 	prev = PrevCount()
 
 	#print "connecting events...",
-	icon.connect("button-press-event", click, reddit, icon, mailIcon, nomailIcon, prev)
+	icon.connect("button-press-event", click, reddit, icon, mailIcon, nomailIcon, prev, notify)
 	#print "done"
 
 	#print "registering polling function...",
-	gobject.timeout_add(60000, poll, reddit, icon, mailIcon, nomailIcon, prev)
+	gobject.timeout_add(60000, poll, reddit, icon, mailIcon, nomailIcon, prev, notify)
 	#print "done"
 
 	#first poll
-	poll(reddit, icon, mailIcon, nomailIcon, prev)
+	poll(reddit, icon, mailIcon, nomailIcon, prev, notify)
 
 
 if __name__ == "__main__":

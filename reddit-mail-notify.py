@@ -8,13 +8,13 @@ import gobject
 import pynotify
 
 
-version = "1.0.7"
+version = "1.0.8"
 user_agent = "reddit-mail-notify v%s by /u/AnSq" % version
 poll_time = 60000
 
 
 def make_message(new_messages, name):
-	msgCount = "No" if new_messages==0 else ""+new_messages
+	msgCount = "No" if new_messages==0 else str(new_messages)
 	plural = "" if new_messages==1 else "s"
 	return "%s new message%s for /u/%s" % (msgCount, plural, name)
 

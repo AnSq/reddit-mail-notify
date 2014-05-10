@@ -6,9 +6,10 @@ import praw
 import gtk
 import gobject
 import pynotify
+import sys
 
 
-version = "1.0.8"
+version = "1.0.9"
 user_agent = "reddit-mail-notify v%s by /u/AnSq" % version
 poll_time = 60000
 
@@ -61,6 +62,14 @@ class PrevCount:
 		self.count = 0
 
 
+def get_praw_handler():
+	handler = None
+	if len(sys.argv) > 1 and sys.argv[1] == "-m":
+		handler = praw.handlers.MultiprocessHandler()
+	else:
+		handler = praw.handlers.DefaultHandler()
+	return handler
+
 
 def setup():
 	#print "loading icons...",
@@ -85,7 +94,7 @@ def setup():
 
 	print "logging in...",
 	try:
-		reddit = praw.Reddit(user_agent=user_agent)
+		reddit = praw.Reddit(user_agent=user_agent, handler=get_praw_handler())
 		reddit.login()
 		print "logged in as /u/%s" % reddit.user.name
 	except Exception as e:

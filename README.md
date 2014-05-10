@@ -12,9 +12,11 @@ Status bar icon and popup notification for new reddit messages. Completely unoff
 
 ## Usage
 
-Simply run the program. It takes no parameters.
+`python reddit-mail-notify.py [-m]`
 
-By default it will prompt you for a username and password, or you can make a `praw.ini` file that looks like this:
+The optional `-m` flag turns on multiprocess support, in case you want to run other PRAW programs alongside it. Run `praw-multiprocess` to start the PRAW request server.
+
+By default the progtam will prompt you for a username and password, or you can make a `praw.ini` file that looks like this:
 
 	[DEFAULT]
 	user=<username>
@@ -24,6 +26,7 @@ By default it will prompt you for a username and password, or you can make a `pr
 
 (Versions indicate what it was developed with.)
 
-* PRAW for reddit interaction (2.1.1)
+* Python (2.7.3)
+* PRAW for reddit interaction (2.1.15)
 * PyGTK for status bar icon (2.24.0)
 * PyNotify for popup messages (0.1.1)

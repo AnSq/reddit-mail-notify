@@ -9,7 +9,7 @@ import pynotify
 import sys
 
 
-version = "1.0.9"
+version = "1.0.10"
 user_agent = "reddit-mail-notify v%s by /u/AnSq" % version
 poll_time = 60000
 
@@ -32,7 +32,10 @@ def poll(reddit, icon, mailIcon, nomailIcon, errorIcon, prev, notify):
 		else:
 			icon.set_from_pixbuf(nomailIcon)
 		if new_messages > prev.count:
-			notify.show()
+			try:
+				notify.show()
+			except Exception as e:
+				print "Notification error: %s: %s" % (type(e).__name__, e)
 		prev.count = new_messages
 	except Exception as e:
 		print "Polling error: %s: %s" % (type(e).__name__, e)

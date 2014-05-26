@@ -12,21 +12,25 @@ Status bar icon and popup notification for new reddit messages. Completely unoff
 
 ## Usage
 
-`python reddit-mail-notify.py [-m]`
+`python reddit-mail-notify.py [OPTIONS]`
 
-The optional `-m` flag turns on multiprocess support, in case you want to run other PRAW programs alongside it. Run `praw-multiprocess` to start the PRAW request server.
+The `--mod` flag turns on modmail mode. This checks for modmail instead of regular messages, and changes the icon to match. Unfortunately, the program cannot count the number of new modmail messages at this time.
 
-By default the progtam will prompt you for a username and password, or you can make a `praw.ini` file that looks like this:
+The `--multi` flag turns on multiprocess support, in case you want to run other PRAW programs alongside it. Run `praw-multiprocess` to start the PRAW request server.
+
+By default the program will prompt you for a username and password, or you can make a `praw.ini` file that looks like this:
 
 	[DEFAULT]
 	user=<username>
 	pswd=<password>
 
-## Dependancies
+If you have multiple accounts that you want to check mail for, simply start the program multiple times, once for each account. You will need to log in manually each time, not using `praw.ini` in this case.
+
+## Dependencies
 
 (Versions indicate what it was developed with.)
 
 * Python (2.7.3)
-* PRAW for reddit interaction (2.1.15)
+* PRAW for reddit interaction (2.1.16)
 * PyGTK for status bar icon (2.24.0)
 * PyNotify for popup messages (0.1.1)

@@ -75,7 +75,7 @@ def click(ob, ev, user, icons):
         #print "right click"
         webbrowser.open("http://www.reddit.com/user/%s" % reddit.user.name)
     user.prev.count = 0
-    user.icon.set_from_pixbuf(icons[user.mode][1])
+    user.icon.set_from_pixbuf(icons[user.mod][1])
     user.icon.set_tooltip(make_message(0, user.reddit.user.name, user.mod))
 
 

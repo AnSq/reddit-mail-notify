@@ -111,12 +111,15 @@ def load_users():
     users = []
 
     for line in f:
-        username, password = line[:-1].split("=", 1)
-        mod = False
-        if username[0] == "!":
-            mod = True
-            username = username[1:]
-        users.append(User(mod, username, password))
+        if "=" in line:
+            username, password = line.split("=", 1)
+            if password[-1] == "\n":
+                password = password[:-1]
+            mod = False
+            if username[0] == "!":
+                mod = True
+                username = username[1:]
+            users.append(User(mod, username, password))
 
     f.close()
     return users

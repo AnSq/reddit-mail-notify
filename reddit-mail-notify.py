@@ -9,7 +9,7 @@ import pynotify
 import sys
 
 
-version = "1.1"
+version = "1.1.1"
 user_agent = "reddit-mail-notify v%s by /u/AnSq" % version
 poll_time = 60000
 
@@ -111,7 +111,7 @@ def load_users():
     users = []
 
     for line in f:
-        if "=" in line:
+        if line[0] != "#" and "=" in line:
             username, password = line.split("=", 1)
             if password[-1] == "\n":
                 password = password[:-1]
